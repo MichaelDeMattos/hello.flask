@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, Blueprint, render_template, request, flash
-from home.controller import ControllerAcounts
+from home.controller import ControllerAcounts, ControllerSendEmail
 
 home = Blueprint('home', __name__, template_folder="templates",
                  static_folder="static", static_url_path="/home/static")
@@ -22,8 +22,9 @@ class Project(object):
 
                 """ Register new acount  """
                 new = ControllerAcounts().insert_new_acount(name, email)
+                send_email = ControllerSendEmail().create_thread(email)
                 if new["status"] == 200:
-                    flash("User registred sucessfully")
+                    flash("User registred sucessfully, check your email")
                     return render_template("email.html", widget_class="is-primary")
 
                 else:
